@@ -8,6 +8,7 @@
  * ============================================================= */
 
 #include "Server.hpp"
+#include <cerrno>
 
 Server::Server(std::string _port, std::string _password) : Password(_password)
 {
