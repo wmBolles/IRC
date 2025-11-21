@@ -8,22 +8,23 @@
  * ============================================================= */
 
 #include "ft_irc.hpp"
+#include <ctime>
 
 std::string GetTime()
 {
-    std::time_t t = std::time(0);
-    std::tm* now = std::localtime(&t);
+    time_t t = time(0);
+    tm* now = localtime(&t);
     char buffer[80];
-    std::strftime(buffer, sizeof(buffer), "%H:%M:%S", now);
+    strftime(buffer, sizeof(buffer), "%H:%M:%S", now);
     return (std::string(buffer));
 }
 
 std::string GetDate()
 {
     char buffer[80] = {0};
-    std::time_t t = std::time(0);
-    std::tm* now = std::localtime(&t);
-    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", now);
+    time_t t = time(0);
+    tm* now = localtime(&t);
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d", now);
     return (std::string(buffer));
 }
 

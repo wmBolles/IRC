@@ -1,5 +1,13 @@
 #include "commands.hpp"
 
+// Simple C++98 compatible to_string for time_t
+static std::string time_to_string(time_t val)
+{
+    std::stringstream ss;
+    ss << val;
+    return ss.str();
+}
+
 // JOIN
 int clientIsInvited(Channel & chan, int clientId)
 {
@@ -208,7 +216,7 @@ int viewChanTopic(Server & srv, std::vector<Client>::iterator client, msg & m)
         + std::string(RPL_TOPICWHOTIME)
         + " " + client->nickname + " " + m.params[0] + " "
         + srv.GetChannelByName(m.params[0]).topicSetBy + " "
-        + std::to_string(srv.GetChannelByName(m.params[0]).topicSetTime) + "\r\n";
+        + time_to_string(srv.GetChannelByName(m.params[0]).topicSetTime) + "\r\n";
     srv.SendMsg(client->id, rplMsg);
     return 0;
 }
@@ -511,7 +519,7 @@ void    showTargetModes(Server & srv, std::vector<Client>::iterator client, msg 
             + " +" + getChanModes(srv.GetChannelByName(m.params[0])) + "\n"
             + ":" + std::string(SRVNAME) + " " + std::string(RPL_CREATIONTIME)
             + " " + client->nickname + " " + m.params[0] + 
-            + " " + std::to_string(srv.GetChannelByName(m.params[0]).creationTime)
+            + " " + time_to_string(srv.GetChannelByName(m.params[0]).creationTime)
             + "\r\n";
         srv.SendMsg(client->id, rplMsg);
     }

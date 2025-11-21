@@ -16,7 +16,6 @@
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
-#include <thread>
 #include <poll.h>
 #include <fcntl.h>
 #include <vector>
