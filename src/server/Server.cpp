@@ -460,11 +460,11 @@ void Server::HandelNewConnection()
     {
         if (errno == EMFILE || errno == ENFILE)
         {
-            Status("Fail to acccept new Client: Too many open files (consider increasing ulimit)", 0);
+            Status("Fail to accept new Client: Too many open files (consider increasing ulimit)", 0);
         }
         else if (errno != EAGAIN && errno != EWOULDBLOCK)
         {
-            Status("Fail to acccept new Client", 0);
+            Status("Fail to accept new Client", 0);
         }
         return;
     }
