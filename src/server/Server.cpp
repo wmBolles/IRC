@@ -8,6 +8,7 @@
  * ============================================================= */
 
 #include "Server.hpp"
+#include <cerrno>
 
 Server::Server(std::string _port, std::string _password) : Password(_password)
 {
@@ -32,7 +33,7 @@ Server::Server(std::string _port, std::string _password) : Password(_password)
     if (bind(this->SockFd, (struct sockaddr *)&this->add, sizeof(this->add)) == -1)
         throw(std::runtime_error("Failed to bind port and ip with socket"));
     Status("Binded successfully", 1);
-    if (listen(this->SockFd, 128) == -1)
+    if (listen(this->SockFd, SOMAXCONN) == -1)
         throw(std::runtime_error(std::string("Failed to Listen on " + _port).c_str()));
     Status(std::string("Listening on Port     : " + _port).c_str(), 1);  
     Status(std::string("  *********  Password : " + _password).c_str(), 1);
@@ -456,8 +457,17 @@ void Server::HandelNewConnection()
 
     int new_socket = accept(this->SockFd, (sockaddr *)&client_addr, &client_len);
     if (new_socket == -1)
-        if (errno != EAGAIN && errno != EWOULDBLOCK)
-            throw std::runtime_error("accept() fail ???????");
+    {
+        if (errno == EMFILE || errno == ENFILE)
+        {
+            Status("Fail to accept new Client: Too many open files (consider increasing ulimit)", 0);
+        }
+        else if (errno != EAGAIN && errno != EWOULDBLOCK)
+        {
+            Status("Fail to accept new Client", 0);
+        }
+        return;
+    }
     
     inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, INET_ADDRSTRLEN);
     SetNonBlockingFd(new_socket);
